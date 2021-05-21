@@ -8,62 +8,141 @@ import java.util.stream.Stream;
 import com.rana.test.geekseat.model.WitchData;
 
 public class Testing {
-	private static int fib(int n) {
+	
+	private static int fib(int n)
+	{
 
-		if (n <= 0)
+		int[][] F = {{1, 1},
+
+				{1, 0}};
+
+		if (n == 0)
+
 			return 0;
 
-		int fibo[] = new int[n + 1];
-		fibo[0] = 0;
-		fibo[1] = 1;
+		power(F, n - 1);
 
-		// Initialize result
-		int sum = fibo[0] + fibo[1];
+		return F[0][0];
+	}
 
-		// Add remaining terms
-		for (int i = 2; i <= n; i++) {
-			fibo[i] = fibo[i - 1] + fibo[i - 2];
-			sum += fibo[i];
+	private static int getMSB(int n){
+		// consectutively set
+
+		// all the bits
+
+		n |= n >> 1;
+
+		n |= n >> 2;
+
+		n |= n >> 4;
+
+		n |= n >> 8;
+
+		n |= n >> 16;
+
+
+		// returns the
+
+		// second MSB
+
+		return ((n + 1) >> 2);
+	}
+	private static void multiply(int F[][],
+
+								 int M[][])
+	{
+
+		int x = F[0][0] * M[0][0] +
+
+				F[0][1] * M[1][0];
+
+		int y = F[0][0] * M[0][1] +
+
+				F[0][1] * M[1][1];
+
+		int z = F[1][0] * M[0][0] +
+
+				F[1][1] * M[1][0];
+
+		int w = F[1][0] * M[0][1] +
+
+				F[1][1] * M[1][1];
+
+
+		F[0][0] = x;
+
+		F[0][1] = y;
+
+		F[1][0] = z;
+
+		F[1][1] = w;
+	}
+	private static void power(int F[][],
+
+							  int n)
+	{
+
+		// Base case
+
+		if (n == 0 || n == 1)
+
+			return;
+
+
+		// take 2D array to
+
+		// store number's
+
+		int[][] M ={{1, 1},
+
+				{1, 0}};
+
+
+		// run loop till MSB > 0
+
+		for (int m = getMSB(n);
+
+			 m > 0; m = m >> 1)
+
+		{
+
+			multiply(F, F);
+
+
+			if ((n & m) > 0)
+
+			{
+
+				multiply(F, M);
+
+			}
+
 		}
-
-		return sum;
 	}
 
 	public static void main(String[] args) {
 		// data initialize : start
-		int n = 10;
+
 		List<WitchData> listWitch = new ArrayList<WitchData>();
 		List<String> listPerson = new ArrayList<String>();
-		listPerson.add("-1,12");
-		listPerson.add("13,17");
-		listPerson.add("12,17");
-		WitchData data = new WitchData();
-		int[] killData = new int[listPerson.size()];
-		int dataPerson = listPerson.size();
+//		listPerson.add("-1,12");
+//		listPerson.add("13,17");
+//		listPerson.add("10,12");
+		listPerson.add("1,20");
 		int temp = 0;
 		int tempInvalidAge = 0;
 		double avgKill = 0.0;
-		// data initialize : stop
-		for (int i = 0; i < n; i++) {
-
-//			System.out.println("year:" + i + " village:" + fib(i));
-			data.setAge(i);
-			data.setKill(fib(i));
-
-			listWitch.add(new WitchData(i, fib(i)));
-
-		}
-
 		for (int j = 0; j < listPerson.size(); j++) {
 			if (!listPerson.get(j).isEmpty()) {
-				String[] person = listPerson.get(j).split(",");
-				int age = Integer.parseInt(person[0]);
-				int year = Integer.parseInt(person[1]);
+				String[] dataRequest = listPerson.get(j).split(",");
+				int age = Integer.parseInt(dataRequest[0]);
+				int year = Integer.parseInt(dataRequest[1]);
 				int diff = year - age;
-				if (!person[0].contains("0")) {
-					int getKill = killVillagers(diff, listWitch);
-//					System.out.println(getKill);
-					temp += getKill; 
+				System.out.println("Age:"+dataRequest[0]+"; Year of Death:"+dataRequest[1]+";Diff"+diff);
+				if (age>0) {
+					temp += fib(diff);
+					System.out.println(temp);
+
 				}
 				else {
 					tempInvalidAge++;
@@ -73,25 +152,11 @@ public class Testing {
 		if (tempInvalidAge > 0) {
 			System.out.println("return = -1 ");
 		} else {
-			avgKill = (double) temp / (double) dataPerson;
+			avgKill = (double) temp / (double) listPerson.size();
 			System.out.println((double)temp);
-			System.out.println((double)dataPerson);
+			System.out.println((double)listPerson.size());
 			System.out.println("return =" + avgKill);
 		}
-	}
-
-	private static int killVillagers(int diff, List<WitchData> listWitch) {
-		// TODO Auto-generated method stub
-		int kill = 0;
-		for (int index = 0; index < listWitch.size(); index++) {
-//			System.out.println(listWitch.get(index).getAge());
-			if (diff == listWitch.get(index).getAge()) {
-//				System.out.println("equals");
-				kill = listWitch.get(index).getKill();
-//				System.out.println(kill);
-			}
-		}
-		return kill;
 	}
 
 }
