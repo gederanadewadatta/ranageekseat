@@ -42,33 +42,27 @@ private List<WitchData> listWitchData = new ArrayList<WitchData>();
 
 	private String doProcess(List<VillagerData> dataVillager) {
 		// TODO Auto-generated method stub
+		// TODO Auto-generated method stub
 		String result = null;
 		WitchData data = new WitchData();
 		List<VillagerData> dataPersonList = dataVillager;
 		int dataPerson = dataPersonList.size();
 		int temp = 0;
 		double avgKill = 0.0;
-		// data initialize : stop
-		for (int i = 0; i < 10; i++) {
 
-			data.setAge(i);
-			data.setKill(fib(i));
-
-			listWitchData.add(new WitchData(i, fib(i)));
-
-		}
-
+		int tempInvalidAge = 0;
 		for (int j = 0; j < dataPerson; j++) {
 			if (!dataPersonList.get(j).equals(null)) {
 //				String[] person = dataPersonList.get(j).;
 				int age = dataPersonList.get(j).getAgedeath();
 				int year = dataPersonList.get(j).getYeardeath();
 				int diff = year - age;
-				if (age > 0) {
-					int getKill = killVillagers(diff, listWitchData);
-					temp += getKill;
-					System.out.println(temp);
+				if (age>0) {
+					temp += fib(diff);
 
+				}
+				else {
+					tempInvalidAge++;
 				}
 			}
 		}
@@ -81,18 +75,7 @@ private List<WitchData> listWitchData = new ArrayList<WitchData>();
 		System.out.println("return =" + avgKill);
 		return result;
 	}
-
-	private static int killVillagers(int diff, List<WitchData> listWitch) {
-		// TODO Auto-generated method stub
-		int kill = 0;
-		for (int index = 0; index < listWitch.size(); index++) {
-			if (diff == listWitch.get(index).getAge()) {
-				kill = listWitch.get(index).getKill();
-				System.out.println("villager killed:"+kill);
-			}
-		}
-		return kill;
-	}
+ 
  	private static int fib(int n)
 	{
 
